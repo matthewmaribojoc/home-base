@@ -37,11 +37,54 @@
       </div>
     </div>
     <div v-if='question == 3'>
-      <h2 class='question'>Does your home have accessibility/disability accommodations?</h2>
-      <input v-model='accessibility' placeholder="ex. you have wheelchair accessibility" type='text'>
-      <div class='next-button' v-on:click='click()' >
-        Next
-      </div>
+      <h2 class='question'>Does your home have accommodations for any of the following disabilities:</h2>
+        <div class="pretty p-icon p-round p-jelly">
+            <input type="checkbox" id="one" value="Blindness" v-model="one">
+            <div class="state p-danger">
+                <i class="icon mdi mdi-check"></i>
+                <label>Blindness</label>
+            </div>
+         </div>
+         <br>
+
+        <div class="pretty p-icon p-round p-jelly">
+        <input type="checkbox" id="two" value="Deafness" v-model="two">
+            <div class="state p-danger">
+                <i class="icon mdi mdi-check"></i>
+                <label>Deafness</label>
+            </div>
+         </div>
+         <br>
+
+        <div class="pretty p-icon p-round p-jelly">
+        <input type="checkbox" id="three" value="Wheelchair" v-model="three">
+            <div class="state p-danger">
+                <i class="icon mdi mdi-check"></i>
+                <label>Wheelchair Accessability</label>
+            </div>
+         </div>
+         <br>
+
+        <div class="pretty p-icon p-round p-jelly">
+        <input type="checkbox" id="four" value="Intellectual" v-model="four">
+            <div class="state p-danger">
+                <i class="icon mdi mdi-check"></i>
+                <label>Intellectual Disability</label>
+            </div>
+         </div>
+         <br>
+
+        <div class="pretty p-icon p-round p-jelly">
+            <input type="checkbox" id="five" value="None" v-model="five">
+            <div class="state p-danger">
+                <i class="icon mdi mdi-check"></i>
+                <label>None</label>
+            </div>
+        </div>
+        <br>
+        <div class='next-button' v-on:click='click()' >
+          Next
+        </div>
     </div>
     <div v-if='question == 4'>
       <h2 class='question'>Do you have pets?</h2>
@@ -106,7 +149,13 @@ export default {
   			kids: this.kids,
         location: this.location,
   			limitations: this.limitations,
-  			accessibility: this.accessibility,
+  			accessibility: {
+          Blindness: this.one,
+          Deafness: this.two,
+          Wheelchair: this.three,
+          Intellectual: this.four,
+          None: this.five
+        },
         email: this.email,
   			pets: this.pets,
   			special: this.special

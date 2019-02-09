@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "pretty-checkbox": "^3.0.3",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
     "vue-slider-component": "^2.8.6"
