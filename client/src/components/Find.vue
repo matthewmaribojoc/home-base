@@ -68,9 +68,8 @@ data: {
 			},
 			special: this.special
 		}
-		const response = await HomeAPI.getFind(json)
-      	var data = response.data
-    	console.log(json)
+		  const response = await HomeAPI.getFind(json)
+      var data = response.data
 
     }
   }
@@ -81,6 +80,5 @@ data: {
 <style lang="css">
 input[type = text],textarea{
 	color:black;
-}  
+}
 </style>
-
