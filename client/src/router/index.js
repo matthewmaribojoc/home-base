@@ -21,15 +21,14 @@ export default new Router({
       component: Home
     },
     {
-<<<<<<< HEAD
       path: '/offer',
       name: 'Offer',
       component: Offer
-=======
+    },
+    {
       path: '/map',
       name: 'Map',
       component: Map
->>>>>>> 332c7bfacce7e61ce34d84a0d061feba9d0adf24
     }
   ]
 })

@@ -7,5 +7,9 @@ export default {
     return API().post('location', {
       query: query
     })
+  },
+  getDetails (query) {
+   console.log(query)
+   return query
   }
 }

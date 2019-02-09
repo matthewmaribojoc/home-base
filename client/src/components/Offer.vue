@@ -30,7 +30,7 @@
 
 	<span>Are there anything else you want us to know?</span>
 		<p style="white-space: pre-line;">{{ message }}</p>
-	<textarea v-model="other" placeholder=""></textarea>
+	<textarea v-model="special" placeholder=""></textarea>
 	<p></p>
 
   	<input type='submit'>
@@ -41,20 +41,32 @@
 </template>
 
 <script>
+import HomeAPI from '@/services/HomeAPI.js'
 export default {
 
 data: {
     rooms: null,
     people: null,
     limitations: null,
-    accessibility: null,
+    accessibility: null, 
     pets: null,
-    other: null
+    special: null
   },
   methods:{
-    submit (evt) {
+    async submit (evt) {
     	evt.preventDefault()
-    	alert(this.people)
+		var json = {
+			rooms: this.rooms,
+			people: this.people,
+			limitations: this.limitations,
+			accessibility: this.accessibility,
+			pets: this.pets,
+			special: this.special
+		}
+		const response = await HomeAPI.getDetails(json)
+      	var data = response.data
+    	console.log(json)
+
     }
   }
 
@@ -62,6 +74,8 @@ data: {
 </script>
 
 <style lang="css">
-  
+input[type = text],textarea{
+	color:black;
+}  
 </style>
 
