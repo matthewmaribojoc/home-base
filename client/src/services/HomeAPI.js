@@ -23,5 +23,10 @@ export default {
       lat: lat,
       lon: lon
     })
+  },
+  sendMatchEmail (email) {
+    return API().post('sendMatchEmail', {
+      email: email
+    })
   }
 }

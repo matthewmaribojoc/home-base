@@ -1,7 +1,6 @@
 <template lang="html">
 <div class='wrapper pure-u-1 pure-g'>
   <form class='host-form' v-on:submit='submit($event)'>
-
     <div v-if='question == -1'>
       <h2 class='question'>What is the size of your group/How many persons?</h2>
       <vue-slider v-model="total" :min='1' :max='20' :tooltipStyle='{"backgroundColor": "#666", "borderColor": "#666"}' :bgStyle='{"backgroundColor": "#666"}' :processStyle='{"backgroundColor": "#ccc"}'></vue-slider>
@@ -10,8 +9,51 @@
       </div>
     </div>
     <div v-if='question == 0'>
-      <h2 class='question'>What is the demographic?</h2>
-      <input v-model='demographic' placeholder="ex. middle aged man/family with a baby" type='text'>
+      <h2 class='question'>Who needs a host?</h2>
+      <div class="pretty p-icon p-round p-jelly">
+	        <input type="checkbox" id="one" value="Family/Group" v-model="family">
+	        <div class="state p-danger">
+	            <i class="icon mdi mdi-check"></i>
+	            <label>Family/Group</label>
+	        </div>
+	     </div>
+       <div class="pretty p-icon p-round p-jelly">
+ 	        <input type="checkbox" id="one" value="Adult Male" v-model="kids">
+ 	        <div class="state p-danger">
+ 	            <i class="icon mdi mdi-check"></i>
+ 	            <label>Kids</label>
+ 	        </div>
+ 	     </div>
+       <div class="pretty p-icon p-round p-jelly">
+ 	        <input type="checkbox" id="one" value="Adult Male" v-model="adultMale">
+ 	        <div class="state p-danger">
+ 	            <i class="icon mdi mdi-check"></i>
+ 	            <label>Adult Male</label>
+ 	        </div>
+ 	     </div>
+       <div class="pretty p-icon p-round p-jelly">
+ 	        <input type="checkbox" id="one" value="Adult Female" v-model="adultFemale">
+ 	        <div class="state p-danger">
+ 	            <i class="icon mdi mdi-check"></i>
+ 	            <label>Adult Female</label>
+ 	        </div>
+ 	     </div>
+       <div class="pretty p-icon p-round p-jelly">
+ 	        <input type="checkbox" id="one" value="Elderly Male" v-model="elderMale">
+ 	        <div class="state p-danger">
+ 	            <i class="icon mdi mdi-check"></i>
+ 	            <label>Elderly Male</label>
+ 	        </div>
+ 	     </div>
+       <div class="pretty p-icon p-round p-jelly">
+ 	        <input type="checkbox" id="one" value="Elderly Female" v-model="elderFemale">
+ 	        <div class="state p-danger">
+ 	            <i class="icon mdi mdi-check"></i>
+ 	            <label>Elderly Female</label>
+ 	        </div>
+ 	     </div>
+
+
       <div class='next-button' v-on:click='click()' >
         Next
       </div>
@@ -53,14 +95,6 @@
 	        </div>
 	     </div>
 	     <br>
-
-	    <div class="pretty p-icon p-round p-jelly">
-	        <input type="checkbox" id="five" value="None" v-model="five">
-	        <div class="state p-danger">
-	            <i class="icon mdi mdi-check"></i>
-	            <label>None</label>
-	        </div>
-		</div>
 		<br>
 
       <div class='next-button' v-on:click='click()' >
@@ -88,37 +122,52 @@ export default {
 components: {
     VueSlider
   },
+    props: ['location'],
 data () {
+
 	return {
-    question: 1,
-    total: null,
+    question: -1,
+    total: 1,
     demographic: null,
     special: null,
     accessibility: null,
+    family: null,
+    kids: null,
+    adultMale: null,
+    adultFemale: null,
+    elderMale: null,
+    elderFemale: null,
     one: false,
     two: false,
     three: false,
-    four: false,
-    five: false
+    four: false
 	}
   },
   methods:{
     async submit (evt) {
     	evt.preventDefault()
 		var json = {
+      location: this.location,
 			total: this.total,
-			demographic: this.demographic,
+      demographic: {
+        family: this.family,
+        kids: this.kids,
+        adultMale: this.adultMale,
+        adultFemale: this.adultFemale,
+        elderMale: this.elderMale,
+        elderFemale: this.elderFemale
+      },
 			accessibility: {
 				Blindness: this.one,
 				Deafness: this.two,
 				Wheelchair: this.three,
-				Intellectual: this.four,
-				None: this.five
+				Intellectual: this.four
 			},
 			special: this.special
 		}
 		  const response = await HomeAPI.getFind(json)
       var data = response.data
+      this.$emit('finish', data)
 
     },
     click: function() {
@@ -130,6 +179,12 @@ data () {
 </script>
 
 <style lang="css" scoped>
+
+  .pretty.p-icon {
+    margin: 5px 0;
+    float: left;
+    clear: both;
+  }
   .wrapper {
     background-color: white;
     color: black;
@@ -191,5 +246,4 @@ data () {
     color: #222;
     margin-bottom: 40px;
   }
->>>>>>> e61e62fa683130f2a6edfe268ba3da50f97d6f72
 </style>

@@ -4,7 +4,7 @@
     <div v-if='question == -1'>
       <h2 class='question'>What's your address?</h2>
       <input v-model='rawAddress' placeholder="7459 Cherry Lane, Fairfax, VA, 22032" type='text'>
-      <div class='next-button' v-on:click='click()' >
+      <div v-if='rawAddress != ""' class='next-button' v-on:click='click()' >
         Next
       </div>
     </div>
@@ -72,15 +72,6 @@
                 <label>Intellectual Disability</label>
             </div>
          </div>
-         <br>
-
-        <div class="pretty p-icon p-round p-jelly">
-            <input type="checkbox" id="five" value="None" v-model="five">
-            <div class="state p-danger">
-                <i class="icon mdi mdi-check"></i>
-                <label>None</label>
-            </div>
-        </div>
         <br>
         <div class='next-button' v-on:click='click()' >
           Next
@@ -103,7 +94,7 @@
     <div v-if='question == 5'>
       <h2 class='question'>What is your email?</h2>
     	<input v-model='email' type='text'>
-      <div class='next-button' v-on:click='click()' >
+      <div v-if='email.length > 0' class='next-button' v-on:click='click()' >
         Next
       </div>
     </div>
@@ -130,13 +121,13 @@ export default {
   data () {
     return {
       question: -1,
-      rooms: null,
-      kids: null,
-      address: null,
-      rawAddress: null,
+      rooms: 1,
+      kids: false,
+      address: "",
+      rawAddress: "",
       limitations: null,
       accessibility: null,
-      email: null,
+      email: "",
       pets: null,
       other: null
     }
@@ -153,8 +144,7 @@ export default {
           Blindness: this.one,
           Deafness: this.two,
           Wheelchair: this.three,
-          Intellectual: this.four,
-          None: this.five
+          Intellectual: this.four
         },
         email: this.email,
   			pets: this.pets,
@@ -195,6 +185,11 @@ export default {
     border-radius: 5px;
     display: block;
     padding: 10px;
+  }
+  .pretty.p-icon {
+    margin: 5px 0;
+    float: left;
+    clear: both;
   }
 
   .host-form input[type=submit] {

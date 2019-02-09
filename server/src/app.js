@@ -69,6 +69,11 @@ app.get('/send-message', (req, res) => {
   res.send('matthewmaribojoc@gmail.com')
 })
 
+app.post('/sendMatchEmail', (req, res) => {
+  sendMessage(req.body.email, 'A match has been found.', 'thanks for being a neighbor')
+  res.send('matthewmaribojoc@gmail.com')
+})
+
 app.post('/addHome', (req, res) => {
   const collection = client.db("test").collection("homes")
   sendMessage(req.body.data.email, "Thanks for signing up", "<b>Thanks for signing up</b>" + JSON.stringify(req.body.data))
@@ -77,21 +82,36 @@ app.post('/addHome', (req, res) => {
   })
 })
 
-app.post('/getHome', (req, res) => {
+app.post('/findHome', (req, res) => {
   const collection = client.db("test").collection("homes")
-  collection.find(req.body.data, function (err, results) {
+  collection.find({}).toArray(function (err, results) {
     var valid = []
+
     for (var i = 0; i < results.length; i++) {
+      var score = 100
       var home = results[i]
-      if (home.rooms < req.body.total) {
+
+      if (home.rooms < req.body.data.total) {
         continue
       }
-      if (home.kids && !req.body.kids) {
+      if (req.body.data.kids && !home.kids) {
         continue
       }
-      valid.push(home)
+      if (req.body.data.accessibility) {
+        for (var property in req.body.data.accessibility) {
+          if (req.body.data.accessibility[property] && !home.accessibility[property]) {
+            score -= 10
+          }
+        }
+      }
+
+      valid.push({
+        home: home,
+        score: score
+      })
     }
-    res.send(req.body.data)
+
+    res.send(valid)
   })
 })
 
@@ -136,10 +156,15 @@ app.post('/location', (req, res) => {
       getCoords.onreadystatechange = function () {
         if (getCoords.readyState === 4) {
           var coords = JSON.parse(getCoords.responseText)
-          console.log(coords[0])
-          location.position.lat = coords[0].lat
-          location.position.lon = coords[0].lon
-          res.send(location)
+          if (coords == null || coords.length == 0) {
+            res.send(location)
+          } else {
+            location.position.lat = coords[0].lat
+            location.position.lon = coords[0].lon
+
+            res.send(location)
+          }
+
         }
       }
       getCoords.send(params)

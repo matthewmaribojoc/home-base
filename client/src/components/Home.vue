@@ -1,5 +1,10 @@
 <template lang="html">
   <div class='container pure-g'>
+    <div class='pure-u-1'>
+      <img src='@/assets/logo.png' class='logo' />
+    </div>
+
+    <br />
     <div class='content pure-g'>
       <div class='tab-0 pure-u-1 pure-g' v-if='tab == 0'>
         <h1 class='pure-u-1'>I want to...</h1>
@@ -30,8 +35,11 @@
         <Offer></Offer>
       </div>
       <div class='tab-2 pure-u-1 pure-g' v-if='tab == 2 && type == "find"'>
-        <Find></Find>
+        <Find :location='location' @finish="findHomes"></Find> <!-- Emit and advance tab -->
       </div>
+    </div>
+    <div class='tab-3 pure-u-1 pure-g map' v-if='tab == 3 && type == "find"'>
+      <Map :homes='availableHomes'></Map>
     </div>
   </div>
 </template>
@@ -40,15 +48,17 @@
 import HomeAPI from '@/services/HomeAPI.js'
 import Offer from '@/components/Offer'
 import Find from '@/components/Find'
+import Map from '@/components/Map'
 
 export default {
   components: {
-    Find, Offer
+    Find, Offer, Map
   },
   data() {
     return {
       tab: 0,
       type: 'host',
+      availableHomes: [],
       location: null,
       locationError: '',
       locationInput: '',
@@ -56,6 +66,10 @@ export default {
     }
   },
   methods: {
+    findHomes (data) {
+      this.availableHomes = data
+      this.tab += 1
+    },
     async nextTab (evt) {
       if (this.tab == 0) {
         if (evt.target.classList.contains('button-find')) {
@@ -67,8 +81,8 @@ export default {
 
       this.tab += 1;
       if (this.tab == 2 && this.location != null) {
-        const response = await HomeAPI.getWeather(this.location.viewPort.topLeftPoint.lat, this.location.viewPort.topLeftPoint.lon)
-        var data = response.data
+        // const response = await HomeAPI.getWeather(this.location.viewPort.topLeftPoint.lat, this.location.viewPort.topLeftPoint.lon)
+        // var data = response.data
       }
     },
     async submitLocation (evt) {
@@ -91,11 +105,12 @@ export default {
 
   .container {
     width: 100%;
+    height: 100%;
   }
   .content {
+    clear: both;
     text-align: center;
     margin: 0 auto;
-    margin-top: 200px;
   }
 
   h1 {
@@ -172,6 +187,20 @@ export default {
     background-color: #fff;
     color: #222;
     border-radius: 10px;
+  }
+
+  .map {
+    width: 100%;
+    height: 100%;
+  }
+
+  img.logo {
+    display: block;
+    width: 250px;
+    height: auto;
+    margin: 10px auto 30px auto;
+    text-align: center;
+    clear: both;
   }
 
 </style>

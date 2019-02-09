@@ -5,7 +5,7 @@ import Map from '@/components/Map'
 import Home from '@/components/Home'
 import Offer from '@/components/Offer'
 import Find from '@/components/Find'
-
+import MatchFound from '@/components/MatchFound'
 
 Vue.use(Router)
 
@@ -15,6 +15,10 @@ export default new Router({
       path: '/test',
       name: 'HelloWorld',
       component: HelloWorld
+    },
+    {
+      path: '/match-found',
+      component: MatchFound
     },
     {
       path: '/',
