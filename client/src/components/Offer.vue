@@ -31,7 +31,7 @@
     </div>
     <div v-if='question == 2'>
       <h2 class='question'>Any limitations on people you will accept?</h2>
-      <input v-model='limitations' placeholder="ex. you would feel uncomfortable with a drug addict" type='text'>
+      <input v-model='limitations' placeholder="ex. if you feel uncomfortable with middle age men" type='text'>
       <div class='next-button' v-on:click='click()' >
         Next
       </div>
@@ -100,7 +100,7 @@
     </div>
     <div v-if='question == 6'>
       <h2 class='question'>Are there anything else you want us to know?</h2>
-      <input v-model='special' placeholder="ex. you have wheelchair accessibility" type='text'>
+      <input v-model='special' placeholder="ex. do you have food allergies in the house" type='text'>
       <br />
       <input type='submit'>
     </div>
