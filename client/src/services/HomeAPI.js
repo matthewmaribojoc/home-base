@@ -9,11 +9,17 @@ export default {
     })
   },
   getDetails (query) {
-   console.log(query)
-   return query
+    return API().post('addHome', {
+      data: query
+    })
   },
   getFind (query) {
-   console.log(query)
-   return query
+    return query;
+  },
+  getWeather (lat, lon) {
+    return API().post('weather', {
+      lat: lat,
+      lon: lon
+    })
   }
 }
