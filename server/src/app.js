@@ -5,6 +5,9 @@ const cors = require('cors')
 const morgan = require('morgan')
 const nodemailer = require("nodemailer");
 
+var handlebars = require('handlebars');
+var fs = require('fs');
+
 const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest
 
 const mongo = require('mongodb')
@@ -36,6 +39,37 @@ app.get('/homes', (req, res) => {
   })
 })
 
+app.get('/extreme-weather', (req, res) => {
+  const collection = client.db("test").collection("homes")
+  collection.find({}).toArray(function (err, results) {
+    readHTMLFile(__dirname + '/../../emergency-email/index.html', function(err, html) {
+        var template = handlebars.compile(html);
+
+        var html = template();
+
+        for (var i = 0; i < results.length; i++) {
+          if (results[i].email != null && results[i].email.length > 0) {
+            sendMessage(results[i].email, 'DANGEROUS WEATHER AHEAD', html)
+          }
+        }
+        res.send('Notifications Sent Out')
+    });
+
+  })
+})
+
+var readHTMLFile = function(path, callback) {
+    fs.readFile(path, {encoding: 'utf-8'}, function (err, html) {
+        if (err) {
+            throw err;
+            callback(err);
+        }
+        else {
+            callback(null, html);
+        }
+    });
+};
+
 async function sendMessage (to, subject, html) {
 
   // Generate test SMTP service account from ethereal.email
@@ -55,7 +89,7 @@ async function sendMessage (to, subject, html) {
 
   // setup email data with unicode symbols
   let mailOptions = {
-    from: 'contact.bemyneighbor@gmail.com', // sender address
+    from: '🏡 Won\'t You Be My Neighbor? <contact.bemyneighbor@gmail.com>', // sender address
     to: to, // list of receivers
     subject: subject, // Subject line
     html: html // html body
@@ -66,19 +100,33 @@ async function sendMessage (to, subject, html) {
 }
 app.get('/send-message', (req, res) => {
 
-  res.send('matthewmaribojoc@gmail.com')
+  res.send('')
 })
 
 app.post('/sendMatchEmail', (req, res) => {
-  sendMessage(req.body.email, 'A match has been found.', 'thanks for being a neighbor')
-  res.send('matthewmaribojoc@gmail.com')
+  readHTMLFile(__dirname + '/../../match-email/index.html', function(err, html) {
+      var template = handlebars.compile(html);
+
+      var html = template();
+
+      sendMessage(req.body.email, 'A match has been found.', html)
+      res.send('')
+  });
 })
 
 app.post('/addHome', (req, res) => {
   const collection = client.db("test").collection("homes")
-  sendMessage(req.body.data.email, "Thanks for signing up", "<b>Thanks for signing up</b>" + JSON.stringify(req.body.data))
+
   collection.insertOne(req.body.data, function (err, results) {
-    res.send(req.body.data)
+
+    readHTMLFile(__dirname + '/../../registration-email/index.html', function(err, html) {
+        var template = handlebars.compile(html);
+
+        var html = template();
+
+        sendMessage(req.body.data.email, 'Thanks for being a good neighbor.', html)
+        res.send(req.body.data)
+    });
   })
 })
 
@@ -96,6 +144,18 @@ app.post('/findHome', (req, res) => {
       }
       if (req.body.data.kids && !home.kids) {
         continue
+      }
+
+      var location = req.body.data.location;
+
+      if (home.location == null || location == null) {
+        continue
+      }
+      if (Math.abs(location.position.lat - home.location.position.lat) > 1) {
+        continue;
+      }
+      if (Math.abs(location.position.lon - home.location.position.lon) > 1) {
+        continue;
       }
       if (req.body.data.accessibility) {
         for (var property in req.body.data.accessibility) {

@@ -151,6 +151,7 @@ export default {
   			special: this.special
   		}
   		const response = await HomeAPI.getDetails(json)
+      this.$router.push({ path: 'registration' })
     },
     click: function() {
       if (this.question == -1) {

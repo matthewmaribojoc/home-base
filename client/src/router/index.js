@@ -6,6 +6,7 @@ import Home from '@/components/Home'
 import Offer from '@/components/Offer'
 import Find from '@/components/Find'
 import MatchFound from '@/components/MatchFound'
+import Neighbor from '@/components/Neighbor'
 
 Vue.use(Router)
 
@@ -19,6 +20,10 @@ export default new Router({
     {
       path: '/match-found',
       component: MatchFound
+    },
+    {
+      path: '/registration',
+      component: Neighbor
     },
     {
       path: '/',
