@@ -62,7 +62,7 @@ export default {
 
       this.tab += 1;
       if (this.tab == 2 && this.location != null) {
-        const response = await HomeAPI.getWeather(this.location.position.lat, this.location.position.lon)
+        const response = await HomeAPI.getWeather(this.location.viewPort.topLeftPoint.lat, this.location.viewPort.topLeftPoint.lon)
         var data = response.data
       }
     },
