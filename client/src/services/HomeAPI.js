@@ -11,5 +11,9 @@ export default {
   getDetails (query) {
    console.log(query)
    return query
+  },
+  getFind (query) {
+   console.log(query)
+   return query
   }
 }
