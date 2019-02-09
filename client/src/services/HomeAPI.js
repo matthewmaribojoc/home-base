@@ -13,6 +13,9 @@ export default {
       data: query
     })
   },
+  getFind (query) {
+    return query;
+  },
   getWeather (lat, lon) {
     return API().post('weather', {
       lat: lat,
