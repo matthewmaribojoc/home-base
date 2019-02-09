@@ -20,6 +20,8 @@ export default {
     margin: 0;
     padding: 0;
     background-color: #74b9ff;
+    background: url('./assets/bg.png');
+    background-position: bottom;
     color: white;
   }
 </style>

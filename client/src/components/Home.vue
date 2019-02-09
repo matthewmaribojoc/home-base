@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class='pure-g'>
+  <div class='container pure-g'>
     <div class='content pure-g'>
       <div class='tab-0 pure-u-1 pure-g' v-if='tab == 0'>
         <h1 class='pure-u-1'>I want to...</h1>
@@ -13,20 +13,20 @@
       <div class='tab-1 pure-u-1 pure-g' v-if='tab == 1'>
         <h1 class='pure-u-1'>Where are you?</h1>
         <form class='pure-u-1' v-on:submit='submitLocation($event)'>
-          <input class='address-input pure-u-1-2' type='text' placeholder='Enter Your Address/Location' v-model='locationInput' />
+          <input class='address-input' type='text' placeholder='Enter Your Address/Location' v-model='locationInput' />
         </form>
-        <span class='location-check pure-u-1' v-if='locationError != ""'>
-          <span class='location-check-text pure-u-1'>{{locationError}}</span>
+        <span class='location-check' v-if='locationError != ""'>
+          <span class='location-check-text'>{{locationError}}</span>
         </span>
-        <div class='location-check pure-u-1' v-else-if='locationTitle != ""'>
-          <span class='location-check-text pure-u-1'>You're near {{locationTitle}}, right?</span>
-          <div v-on:click='nextTab($event)' class='button-small button-find pure-u-1-4'>
+        <section class='location-check' v-else-if='locationTitle != ""'>
+          <span class='location-check-text'>You're near {{locationTitle}}, right?</span>
+          <br />
+          <section v-on:click='nextTab($event)' class='button-small button-find pure-u-1-4'>
             Yes
-          </div>
-        </div>
+          </section>
+        </section>
       </div>
       <div class='tab-2 pure-u-1 pure-g' v-if='tab == 2 && type == "host"'>
-        {{type}}
         <Offer></Offer>
       </div>
     </div>
@@ -43,7 +43,7 @@ export default {
   data() {
     return {
       tab: 0,
-      type: 'find',
+      type: 'host',
       location: null,
       locationError: '',
       locationInput: '',
@@ -83,6 +83,10 @@ export default {
 </script>
 
 <style lang="css" scoped>
+
+  .container {
+    width: 100%;
+  }
   .content {
     text-align: center;
     margin: 0 auto;
@@ -95,6 +99,7 @@ export default {
 
   .button {
     height: 40px;
+    outline: none;
     padding: 30px;
     background-color: #ff7675;
     border-bottom: 7px solid #b45b5a;
@@ -107,7 +112,9 @@ export default {
     vertical-align: middle;
     cursor: pointer;
     font-size: 110%;
+    color: white;
     transition: 0.05s all ease-in-out;
+    cursor: pointer;
   }
 
   .button-small {
@@ -122,12 +129,14 @@ export default {
     line-height: 40px;
     vertical-align: middle;
     cursor: pointer;
+    color: white;
     font-size: 110%;
+    cursor: pointer;
   }
 
   .button-small:hover {
-      margin-top: 17px;
-      border-bottom: none;
+    margin-top: 17px;
+    border-bottom: none;
   }
 
   .button:hover{
@@ -146,12 +155,18 @@ export default {
     width: 300px;
     height: 30px;
     padding: 10px 10px;
-    margin-bottom: 40px
+    margin-bottom: 40px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
   }
 
   .location-check-text {
-    font-size: 125%;
-    margin-bottom: 10px;
+  }
+
+  .tab-1 {
+    background-color: #fff;
+    color: #222;
+    border-radius: 10px;
   }
 
 </style>

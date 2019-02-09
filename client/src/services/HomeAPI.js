@@ -9,8 +9,9 @@ export default {
     })
   },
   getDetails (query) {
-   console.log(query)
-   return query
+    return API().post('addHome', {
+      data: query
+    })
   },
   getWeather (lat, lon) {
     return API().post('weather', {

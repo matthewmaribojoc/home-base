@@ -36,7 +36,7 @@ app.get('/homes', (req, res) => {
   ])
 })
 
-async function sendMessage (to) {
+async function sendMessage (to, subject, html) {
 
   // Generate test SMTP service account from ethereal.email
   // Only needed if you don't have a real mail account for testing
@@ -57,17 +57,24 @@ async function sendMessage (to) {
   let mailOptions = {
     from: 'contact.bemyneighbor@gmail.com', // sender address
     to: to, // list of receivers
-    subject: "Hello ✔", // Subject line
-    text: "Hello world?", // plain text body
-    html: "<b>Hello world?</b>" // html body
+    subject: subject, // Subject line
+    html: html // html body
   };
 
   // send mail with defined transport object
   let info = await transporter.sendMail(mailOptions)
 }
 app.get('/send-message', (req, res) => {
-  sendMessage('matthewmaribojoc@gmail.com')
+
   res.send('matthewmaribojoc@gmail.com')
+})
+
+app.post('/addHome', (req, res) => {
+  const collection = client.db("test").collection("homes")
+  sendMessage(req.body.data.email, "Thanks for signing up", "<b>Thanks for signing up</b>" + JSON.stringify(req.body.data))
+  collection.insertOne(req.body.data, function (err, results) {
+    res.send(req.body.data)
+  })
 })
 
 app.post('/weather', (req, res) => {
@@ -79,9 +86,7 @@ app.post('/weather', (req, res) => {
   scriptCall.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
   scriptCall.onreadystatechange = function () {
     if (scriptCall.readyState === 4) {
-      console.log(scriptCall.responseText)
       var data = JSON.parse(scriptCall.responseText)
-      console.log(data)
       res.send(data);
     }
   }
@@ -99,6 +104,10 @@ app.post('/location', (req, res) => {
   scriptCall.onreadystatechange = function () {
     if (scriptCall.readyState === 4) {
       var data = JSON.parse(scriptCall.responseText)
+      if (data.results == null || data.results === null) {
+        res.send([])
+        return
+      }
       res.send(data.results[0]);
     }
   }
