@@ -30,10 +30,10 @@ app.use(bodyParser.json())
 app.use(cors())
 
 app.get('/homes', (req, res) => {
-  res.send([
-    'Home 1',
-    'Home 2'
-  ])
+  const collection = client.db("test").collection("homes")
+  collection.find({}).toArray(function (err, results) {
+    res.send(results)
+  })
 })
 
 async function sendMessage (to, subject, html) {
@@ -108,7 +108,23 @@ app.post('/location', (req, res) => {
         res.send([])
         return
       }
-      res.send(data.results[0]);
+      var location = data.results[0]
+      var getCoords = new XMLHttpRequest()
+
+      params = 'q=' + encodeURI(location.address.freeformAddress) + '&format=json'
+      getCoords.open('GET', 'https://nominatim.openstreetmap.org/search?' + params, true)
+      getCoords.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
+      getCoords.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+      getCoords.onreadystatechange = function () {
+        if (getCoords.readyState === 4) {
+          var coords = JSON.parse(getCoords.responseText)
+          console.log(coords[0])
+          location.position.lat = coords[0].lat
+          location.position.lon = coords[0].lon
+          res.send(location)
+        }
+      }
+      getCoords.send(params)
     }
   }
   scriptCall.send(params)
