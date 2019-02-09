@@ -1,5 +1,13 @@
 <template lang="html">
-  <div id='map'>
+  <div id='map-wrapper'>
+    <div id='matcher'>
+      <div v-for='home in homes' v-on:click='zoom(home)'>
+        {{home.location.address.freeformAddress}}
+      </div>
+    </div>
+    <div id='map'>
+
+    </div>
 
   </div>
 </template>
@@ -29,19 +37,18 @@ export default {
     map.events.add('ready', this.loadPins);
   },
   methods: {
-    displayPins () {
-      /*Create a data source and add it to the map*/
-
+    zoom (home) {
+      map.setCamera({
+        center: [home.location.position.lon, home.location.position.lat],
+        zoom: 16,
+      })
     },
-    async loadPins () {
-      const response = await HomeAPI.getHomes()
-      var homes = response.data
+    displayPins (pins) {
       var dataSource = new atlas.source.DataSource();
       map.sources.add(dataSource);
 
       for (var i = 0; i < homes.length; i++) {
         var position = [homes[i].location.position.lon, homes[i].location.position.lat]
-        console.log(position)
         dataSource.add(new atlas.data.Feature(new atlas.data.Point(position), {
           name: 'point',
           description: 'Microsoft Building 41'
@@ -51,6 +58,13 @@ export default {
       var symbolLayer = new atlas.layer.SymbolLayer(dataSource);
       //Add the polygon and line the symbol layer to the map.
       map.layers.add([symbolLayer]);
+    },
+    async loadPins () {
+      const response = await HomeAPI.getHomes()
+      var homes = response.data
+      this.homes = homes
+      this.displayPins(homes)
+
     }
   }
 }
@@ -58,8 +72,21 @@ export default {
 
 <style rel="stylesheet" href="https://atlas.microsoft.com/sdk/css/atlas.min.css?api-version=2" type="text/css"></style>
 <style lang="css" scoped>
-  #map {
+  #map-wrapper {
     width: 100%;
-    height: 200%;
+    height: 100%;
+  }
+
+  #matcher {
+    float: left;
+    width: 40%;
+    height: 100%;
+    background-color: white;
+    color: black;
+  }
+  #map {
+    float: right;
+    width: 60%;
+    height: 100%;
   }
 </style>

@@ -77,6 +77,24 @@ app.post('/addHome', (req, res) => {
   })
 })
 
+app.post('/getHome', (req, res) => {
+  const collection = client.db("test").collection("homes")
+  collection.find(req.body.data, function (err, results) {
+    var valid = []
+    for (var i = 0; i < results.length; i++) {
+      var home = results[i]
+      if (home.rooms < req.body.total) {
+        continue
+      }
+      if (home.kids && !req.body.kids) {
+        continue
+      }
+      valid.push(home)
+    }
+    res.send(req.body.data)
+  })
+})
+
 app.post('/weather', (req, res) => {
 
   var params = 'id=524901&APPID=7040203a16191db0180ea67bb269bf9b&lat=' + req.body.lat + '&lon=' + req.body.lon + ''

@@ -117,9 +117,8 @@ data () {
 			},
 			special: this.special
 		}
-		const response = await HomeAPI.getFind(json)
-      	var data = response.data
-    	console.log(json)
+		  const response = await HomeAPI.getFind(json)
+      var data = response.data
 
     },
     click: function() {
@@ -192,4 +191,5 @@ data () {
     color: #222;
     margin-bottom: 40px;
   }
+>>>>>>> e61e62fa683130f2a6edfe268ba3da50f97d6f72
 </style>

@@ -29,6 +29,9 @@
       <div class='tab-2 pure-u-1 pure-g' v-if='tab == 2 && type == "host"'>
         <Offer></Offer>
       </div>
+      <div class='tab-2 pure-u-1 pure-g' v-if='tab == 2 && type == "find"'>
+        <Find></Find>
+      </div>
     </div>
   </div>
 </template>
@@ -36,9 +39,11 @@
 <script>
 import HomeAPI from '@/services/HomeAPI.js'
 import Offer from '@/components/Offer'
+import Find from '@/components/Find'
+
 export default {
   components: {
-    Offer
+    Find, Offer
   },
   data() {
     return {
