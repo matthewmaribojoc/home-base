@@ -19,10 +19,6 @@ export default {
         subscriptionKey: 'ioE_-AdAyyS3-W9gRuNGaa4MMtf6OAYzjQn_nhKUnX4'
       }
     });
-
-
-
-
   }
 }
 </script>

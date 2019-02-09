@@ -11,5 +11,11 @@ export default {
   getDetails (query) {
    console.log(query)
    return query
+  },
+  getWeather (lat, lon) {
+    return API().post('weather', {
+      lat: lat,
+      lon: lon
+    })
   }
 }
